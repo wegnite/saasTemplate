@@ -28,7 +28,13 @@ model User {
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
 
+  // Relations
   imageGenerations ImageGeneration[] // Relation to ImageGeneration model
+  textGenerations  TextGeneration[] // Relation to TextGeneration model
+  audioProcessings AudioProcessing[] // Relation to AudioProcessing model
+  usageLogs        UsageLog[] // Relation to UsageLog model
+  settings         UserSetting? // Relation to UserSetting model
+  subscription     Subscription? // Relation to Subscription model
 }
 
 // --- Image Generation Model ---
@@ -41,7 +47,89 @@ model ImageGeneration {
   aspectRatio String?  // Aspect ratio (e.g., 1:1, 16:9)
   imageUrl  String   // URL of the generated image (consider using file storage later)
   status    String   @default("completed") // Generation status (e.g., pending, completed, failed)
+  creditsUsed Int    @default(1) // Credits used for this generation
   createdAt DateTime @default(now())
+
+  @@index([userId])
+}
+
+// --- Text Generation Model ---
+model TextGeneration {
+  id            String   @id @default(cuid())
+  userId        String   // Relation to User model
+  user          User     @relation(fields: [userId], references: [id])
+  prompt        String   @db.Text // The prompt used for generation
+  generatedText String   @db.LongText // The generated text content
+  wordCount     Int? // Number of words in the generated text
+  parameters    Json? // Additional parameters used for generation (e.g., temperature, model)
+  status        String   @default("completed") // Generation status
+  creditsUsed   Int      @default(1) // Credits used for this generation
+  createdAt     DateTime @default(now())
+
+  @@index([userId])
+}
+
+// --- Audio Processing Model ---
+model AudioProcessing {
+  id              String   @id @default(cuid())
+  userId          String   // Relation to User model
+  user            User     @relation(fields: [userId], references: [id])
+  processType     String   // Type of processing (e.g., transcription, noise-reduction, synthesis)
+  inputAudioUrl   String   // URL of the input audio file
+  outputAudioUrl  String?  // URL of the processed audio file (if applicable)
+  transcriptText  String?  @db.LongText // Transcription text (if applicable)
+  parameters      Json?    // Additional parameters used for processing
+  status          String   @default("completed") // Processing status
+  creditsUsed     Int      @default(2) // Credits used for this processing
+  createdAt       DateTime @default(now())
+
+  @@index([userId])
+}
+
+// --- User Setting Model ---
+model UserSetting {
+  id              String   @id @default(cuid())
+  userId          String   @unique // Relation to User model
+  user            User     @relation(fields: [userId], references: [id])
+  theme           String   @default("dark") // UI theme preference
+  language        String   @default("zh") // Language preference
+  emailNotifications Boolean @default(true) // Email notification preference
+  defaultImageStyle String? // Default style for image generation
+  defaultAspectRatio String? // Default aspect ratio for image generation
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([userId])
+}
+
+// --- Usage Log Model ---
+model UsageLog {
+  id              String   @id @default(cuid())
+  userId          String   // Relation to User model
+  user            User     @relation(fields: [userId], references: [id])
+  type            String   // Type of usage (e.g., image-generation, text-generation)
+  featureId       String?  // ID of the related feature (optional)
+  creditsUsed     Int      // Number of credits used
+  description     String?  // Description of the usage
+  createdAt       DateTime @default(now())
+
+  @@index([userId])
+  @@index([type])
+}
+
+// --- Subscription Model ---
+model Subscription {
+  id                  String   @id @default(cuid())
+  userId              String   @unique // Relation to User model
+  user                User     @relation(fields: [userId], references: [id])
+  plan                PlanType // The plan type
+  status              String   // Subscription status (e.g., active, canceled, past_due)
+  stripeSubscriptionId String? @unique // Stripe Subscription ID
+  currentPeriodStart  DateTime // Start of current billing period
+  currentPeriodEnd    DateTime // End of current billing period
+  cancelAtPeriodEnd   Boolean  @default(false) // Whether to cancel at period end
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
 
   @@index([userId])
 }
