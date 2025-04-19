@@ -84,13 +84,17 @@ export default function Home() {
             rotationIntensity={5}
           >
             <div className="overflow-hidden rounded-xl">
-              <div className="h-[350px] w-full bg-gray-900/80 flex items-center justify-center">
+              <div className="h-[350px] w-full bg-gray-900/80 flex items-center justify-center relative">
                 <div className="absolute -top-3 left-5 flex space-x-2">
                   <div className="h-3 w-3 rounded-full bg-red-500"></div>
                   <div className="h-3 w-3 rounded-full bg-yellow-500"></div>
                   <div className="h-3 w-3 rounded-full bg-green-500"></div>
                 </div>
-                <p className="text-xl text-gray-400">AI应用界面展示区</p>
+                <img
+                  src="/images/home.jpg"
+                  alt="AI应用界面展示"
+                  className="object-cover object-center w-full h-full"
+                />
               </div>
             </div>
           </MotionCard>
@@ -140,8 +144,8 @@ export default function Home() {
                 rotationIntensity={6}
               >
                 {index === 1 && (
-                  <div className="absolute -top-4 left-1/2 -translate-x-1/2 rounded-full bg-gradient-to-r from-purple-600 to-blue-500 px-3 py-1 text-sm font-medium">
-                    最受欢迎
+                  <div className="absolute top-2 left-1/2 -translate-x-1/2 rounded-full bg-gradient-to-r from-purple-600 to-blue-500 px-3 py-1 text-sm font-medium">
+                    推荐
                   </div>
                 )}
                 <h3 className="mb-2 text-2xl font-bold">{plan.name}</h3>
