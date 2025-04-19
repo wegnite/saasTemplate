@@ -1,26 +1,178 @@
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@layer utilities {
+  .bg-gradient-primary {
+    background-image: linear-gradient(135deg, #6d28d9 0%, #2563eb 100%);
+  }
+  .bg-gradient-secondary {
+    background-image: linear-gradient(135deg, #db2777 0%, #7c3aed 100%);
+  }
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+@layer components {
+  .glass {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
+  }
+
+  .gradient-text {
+    @apply bg-gradient-primary bg-clip-text text-transparent font-semibold;
+  }
+
+  .cl-rootBox {
+    @apply w-full;
+  }
+
+  .cl-card {
+    @apply shadow-none bg-white/20 backdrop-blur-md rounded-xl w-full;
+  }
+
+  .cl-headerTitle,
+  .cl-headerSubtitle,
+  .cl-formFieldLabel,
+  .cl-formFieldHint,
+  .cl-socialButtonsBlockButtonText,
+  .cl-dividerText,
+  .cl-footerActionText {
+    @apply text-gray-900 dark:text-gray-100 font-medium;
+  }
+
+  .cl-formButtonPrimary {
+    @apply bg-gradient-primary text-white shadow-lg hover:opacity-90 transition-all duration-300 
+    text-base font-semibold h-auto py-3 rounded-lg;
+  }
+
+  .cl-formFieldInput {
+    @apply rounded-lg px-4 py-3 
+    text-gray-900 dark:text-white 
+    border border-gray-200 dark:border-gray-700 
+    bg-white dark:bg-gray-800 
+    focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20 
+    transition-colors placeholder-gray-400 dark:placeholder-gray-500;
+  }
+
+  .cl-socialButtonsBlockButton {
+    @apply border border-gray-200 dark:border-gray-700 
+    bg-white dark:bg-gray-800
+    hover:bg-gray-50 dark:hover:bg-gray-700 
+    shadow-sm transition-colors rounded-lg;
+  }
+
+  .cl-dividerLine {
+    @apply bg-gray-200 dark:bg-gray-700;
+  }
+
+  .cl-footerActionLink {
+    @apply text-primary-700 hover:text-primary-800 dark:text-primary-300 dark:hover:text-primary-200 font-medium;
+  }
+
+  .cl-identityPreviewEditButton {
+    @apply text-primary-700 dark:text-primary-300 font-medium;
+  }
+
+  .cl-formFieldAction {
+    @apply text-primary-700 hover:text-primary-800 dark:text-primary-300 dark:hover:text-primary-200 font-medium;
+  }
+
+  .cl-userButtonTrigger {
+    @apply rounded-full bg-white/20 backdrop-blur-sm 
+    hover:bg-white/30 dark:hover:bg-gray-700/70 
+    p-1.5 transition-colors;
+  }
+
+  .cl-userButtonPopoverCard {
+    @apply bg-white dark:bg-gray-800 
+    border border-gray-200 dark:border-gray-700 
+    backdrop-blur-lg rounded-xl shadow-lg;
+  }
+
+  .cl-userPreviewMainIdentifier,
+  .cl-userPreviewSecondaryIdentifier {
+    @apply text-gray-900 dark:text-white font-medium;
+  }
+
+  .cl-userButtonPopoverActionButtonText {
+    @apply text-gray-700 dark:text-gray-200;
+  }
+
+  .cl-userButtonPopoverActionButtonIcon {
+    @apply text-gray-500 dark:text-gray-400;
+  }
+}
+
+:root {
+  --foreground-rgb: 255, 255, 255;
+  --background-start-rgb: 0, 0, 0;
+  --background-end-rgb: 0, 0, 0;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --foreground-rgb: 255, 255, 255;
+    --background-start-rgb: 0, 0, 0;
+    --background-end-rgb: 0, 0, 0;
   }
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  color: rgb(var(--foreground-rgb));
+  background: linear-gradient(
+    to bottom,
+    rgb(var(--background-start-rgb)),
+    rgb(var(--background-end-rgb))
+  );
+  min-height: 100vh;
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+@keyframes pulse-subtle {
+  0% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.5;
+  }
+}
+
+.animate-pulse-subtle {
+  animation: pulse-subtle 2s ease-in-out infinite;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
 }

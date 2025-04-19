@@ -1,0 +1,54 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  // output   = "../src/generated/prisma" // Consider custom output path if needed
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+// --- User Model ---
+model User {
+  id            String    @id @default(cuid()) // Unique ID for the user
+  clerkId       String    @unique // Clerk User ID
+  email         String    @unique
+  firstName     String?
+  lastName      String?
+  profileImageUrl String?
+  credits       Int       @default(100) // Default credits for new users
+  plan          PlanType  @default(FREE) // Subscription plan
+  stripeCustomerId String?   @unique // Stripe Customer ID for payments
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  imageGenerations ImageGeneration[] // Relation to ImageGeneration model
+}
+
+// --- Image Generation Model ---
+model ImageGeneration {
+  id        String   @id @default(cuid())
+  userId    String   // Relation to User model
+  user      User     @relation(fields: [userId], references: [id])
+  prompt    String   @db.Text // The prompt used for generation
+  style     String?  // Style used (e.g., realistic, anime)
+  aspectRatio String?  // Aspect ratio (e.g., 1:1, 16:9)
+  imageUrl  String   // URL of the generated image (consider using file storage later)
+  status    String   @default("completed") // Generation status (e.g., pending, completed, failed)
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+}
+
+// --- Enums ---
+enum PlanType {
+  FREE
+  PRO
+  ENTERPRISE
+}
