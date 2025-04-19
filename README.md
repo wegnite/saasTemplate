@@ -1,5 +1,5 @@
 # AI+ SaaS 网站模板
-
+用 Cursor 生成了一个 AI Saas 模板，方便后面AI Saas 网站使用
 一个现代化、高性能的AI驱动SaaS网站模板，适用于独立开发者快速构建专业级AI应用网站。设计灵感来源于[YouPhoto.ai](https://youphoto.ai/)等优秀AI产品网站，并进行了功能和用户体验的全面优化。
 
 ![网站预览1](public/images/prod1.jpg)
